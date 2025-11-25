@@ -34,7 +34,7 @@ models = {
     "ConvNeXtTiny": [ConvNeXtTiny,"ConvNeXtTiny_500_epochs.pth"],
     "ResNet50": [ResNet50,"ResNet50_500_epochs.pth"],
     "ResNet101": [ResNet101,"ResNet101_400_epochs.pth"],
-    "ViT-S8": [ViT_S8,"ViT_S8.pth"],
+    # "ViT-S8": [ViT_S8,"ViT_S8.pth"],
 }
 
 # Path for the combined cache file containing predictions for all models
@@ -43,7 +43,7 @@ CACHE_PATH = os.path.join(ROOT, "all_models_similarity_filled.npz")
 preds = {}
 if os.path.exists(CACHE_PATH):
     print("Loading existing combined predictions cache...")
-    loaded = np.load(CACHE_PATH, allow_pickle=True)
+    loaded = np.load(CACHE_PATH,mmap_mode='r', allow_pickle=True)
     # Each entry was saved as an object; convert back to dict
     preds = {model: loaded[model].item() for model in loaded.files}
     print(f"Loaded predictions for models: {list(preds.keys())}")
@@ -246,7 +246,7 @@ def make_KC_model(test_target):
     Fit Kozeny-Carman C parameter for each component and return a 2x2 matrix of C values.
     Uses only training data.
     
-    Kozeny-Carman equation: k = C * φ³ / (1-φ)²
+    Kozeny-Carman equation: k = C * φ^3 / (1-φ)^2
     Where:
         k = permeability
         φ = porosity
@@ -254,10 +254,10 @@ def make_KC_model(test_target):
     """
     train_size = 16000
     data_path = os.path.join(os.path.dirname(__file__), "data")
-    train_and_val_images = np.load(os.path.join(data_path, 'images_filled.npy'))[:train_size]
-    permeabilities = np.load(os.path.join(data_path, 'k.npy'))[:train_size]
+    train_and_val_images = np.load(os.path.join(data_path, 'images_filled.npy'),mmap_mode='r')[:train_size]
+    permeabilities = np.load(os.path.join(data_path, 'train_and_val_k.npy'),mmap_mode='r')[:train_size]
     test_image_path = os.path.join(data_path, "test_images_filled.npy")
-    test_images = np.load(test_image_path)
+    test_images = np.load(test_image_path,mmap_mode='r')
     # Training porosities (solid fraction, so porosity = 1 - solid)
     train_porosities = 1 - train_and_val_images.mean(axis=(1,2))  # shape (N,)
    
@@ -265,26 +265,26 @@ def make_KC_model(test_target):
     
     for i in range(2):
         for j in range(2):
-            k_values = permeabilities[:,i,j]
-            
-            # Filter for valid porosity range and finite k values
-            mask = (train_porosities > 0) & (train_porosities < 1) & np.isfinite(k_values)
-            
-            # Fit C: rearrange k = C * φ³/(1-φ)² to get C = k * (1-φ)²/φ³
-            C_vals = k_values[mask] * (1 - train_porosities[mask])**2 / (train_porosities[mask]**3)
-            C_vals = C_vals[np.isfinite(C_vals) & (C_vals > 0)]
-            C_median = np.median(C_vals)
-            
-            print(f"Fitted C[{i},{j}] = {C_median:.4e}")
-            
-            # Predict using fitted C: k = C * φ³/(1-φ)²
-            test_poro = 1- test_images.mean(axis=(1,2))  # avoid zero porosity
-            
-            # Handle edge cases where porosity is 0 or 1
-            # safe_poro = np.clip(test_poro, 1e-6, 1 - 1e-6)
             if i!=j:
-                KC_predictions[:,i,j] = 0*C_median * (test_poro**3) / ((1 - test_poro)**2)
+                KC_predictions[:,i,j] = np.zeros_like(test_poro)#*C_median * (test_poro**3) / ((1 - test_poro)**2)
             else:    
+                k_values = permeabilities[:,i,j]
+                
+                # Filter for valid porosity range and finite k values
+                mask = (train_porosities > 0) & (train_porosities < 1) & np.isfinite(k_values)
+                
+                # Fit C: rearrange k = C * φ³/(1-φ)² to get C = k * (1-φ)²/φ³
+                C_vals = k_values[mask] * (1 - train_porosities[mask])**2 / (train_porosities[mask]**3)
+                C_vals = C_vals[np.isfinite(C_vals) & (C_vals > 0)]
+                C_median = np.median(C_vals)
+                
+                print(f"Fitted C[{i},{j}] = {C_median:.4e}")
+                
+                # Predict using fitted C: k = C * φ³/(1-φ)²
+                test_poro = 1- test_images.mean(axis=(1,2))  # avoid zero porosity
+                
+                # Handle edge cases where porosity is 0 or 1
+                # safe_poro = np.clip(test_poro, 1e-6, 1 - 1e-6)
                 KC_predictions[:,i,j] = C_median * (test_poro**3) / ((1 - test_poro)**2)
             # KC_predictions[:,i,j] = C_median * (safe_poro**3) / ((1 - safe_poro)**2)
 

@@ -1,5 +1,7 @@
-*.csv
+*.pyc
 *.npy
 *.pth
 *.yaml
 *.sh
+*.npz
+*.pdf

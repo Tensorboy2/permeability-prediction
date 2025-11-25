@@ -129,7 +129,7 @@ def get_available_workers():
         return multiprocessing.cpu_count()
 
 def get_data(batch_size = 32,
-             test_size=0.2, 
+             val_size=0.2, 
              hflip=True, 
              vflip=True, 
              rotate=True, 
@@ -179,10 +179,10 @@ def get_data(batch_size = 32,
     # Split into train and test sets with fixed seed for reproducibility:
     num_samples = len(dataset)
     print(f"Num datapoints: {num_samples}")
-    train_size = int((1 - test_size) * num_samples)
-    test_size = num_samples - train_size
+    train_size = int((1 - val_size) * num_samples)
+    val_size = num_samples - train_size
     generator = torch.Generator().manual_seed(42)
-    train_dataset, test_dataset = torch.utils.data.random_split(dataset, [train_size, test_size], generator=generator)
+    train_dataset, val_dataset = torch.utils.data.random_split(dataset, [train_size, val_size], generator=generator)
 
     # Create DataLoaders for train and test datasets with fixed seed for shuffling:
     train_data_loader = DataLoader(train_dataset, 
@@ -192,13 +192,13 @@ def get_data(batch_size = 32,
                                     pin_memory=True,
                                     generator=generator)
 
-    test_data_loader = DataLoader(test_dataset, 
+    val_data_loader = DataLoader(val_dataset, 
                                     batch_size=batch_size, 
                                     shuffle=False, 
                                     num_workers=num_workers,
                                     pin_memory=True)
 
-    return train_data_loader, test_data_loader
+    return train_data_loader, val_data_loader
 
 
 def print_dataset_size_gb():

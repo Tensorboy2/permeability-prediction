@@ -1,0 +1,1 @@
+In the plot code of the metrics, the name for validation metrics is referred to as test. This is not the same as the actual test metrics which is only used when making the similarity plots, and the table of the top performance.

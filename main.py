@@ -66,8 +66,8 @@ def main(model, hyperparameters, data, save_path="metrics.csv", save_model_path=
                              weight_decay=weight_decay) # AdamW for decoupled weight decay.
     model.to(device)
     print(model.name) # Print model to log current model in training.
-    train_data_loader, test_data_loader = get_data(batch_size=batch_size,
-                                                   test_size=data["test_size"],
+    train_data_loader, val_data_loader = get_data(batch_size=batch_size,
+                                                   val_size=data["val_size"],
                                                    rotate=data["rotate"],
                                                    hflip=data["hflip"],
                                                    vflip=data["vflip"],
@@ -78,7 +78,7 @@ def main(model, hyperparameters, data, save_path="metrics.csv", save_model_path=
     train(model,
             optimizer,
             train_data_loader,
-            test_data_loader, 
+            val_data_loader, 
             num_epochs=num_epochs,
             warmup_steps=warmup_steps,
             decay=decay,

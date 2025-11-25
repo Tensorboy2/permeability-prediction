@@ -26,7 +26,7 @@ common = {
         "vflip": False,
         "rotate": False,
         "group": True,
-        "test_size": 0.2,
+        "val_size": 0.2,
         "num_samples": None,
     },
     "hyperparameters": {

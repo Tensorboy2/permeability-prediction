@@ -45,7 +45,7 @@ def r2_score_torch(y_true: torch.Tensor, y_pred: torch.Tensor) -> torch.Tensor:
 def train(model = None, 
           optimizer = None, 
           train_data_loader = None, 
-          test_data_loader = None, 
+          val_data_loader = None, 
           num_epochs = 5, 
           device = 'cpu',
           save_path="metrics.csv",
@@ -56,13 +56,13 @@ def train(model = None,
           use_amp=True):
     '''
     Training function.
-    Performs AdamW optimization to model on train data loader and predicts on test data loader.
+    Performs AdamW optimization to model on train data loader and predicts on val data loader.
     Saves metrics from training.
 
     # Parameters:
     - model (torch.nn.Module): Instance of trainable model.
     - optimizer (torch.optim): Optimizer instance.
-    - test_data_loader (torch.utils.data.DataLoader): Instance of the test data loader.
+    - val_data_loader (torch.utils.data.DataLoader): Instance of the val data loader.
     - num_epochs (int): Number of training epochs.
     - device (string/torch.device): Hardware dependent: cuda if available
     - save_path (string): Path to save training metrics.
@@ -78,8 +78,8 @@ def train(model = None,
         "epoch": [],
         "train_mse" : [], # Mean square error
         "train_r2" : [], # Coefficient of Determination
-        "test_mse" : [], # Mean square error
-        "test_r2" : [], # Coefficient of Determination
+        "val_mse" : [], # Mean square error
+        "val_r2" : [], # Coefficient of Determination
         "grad_norm": []  # To track the L2 norm of the gradients
     }
 
@@ -89,7 +89,7 @@ def train(model = None,
         model_name = getattr(model, "name", model.__class__.__name__)
         save_model_path = f"{model_name}.pth"
 
-    best_test_mse = float("inf")
+    best_val_mse = float("inf")
     num_batches = len(train_data_loader)
     total_steps = num_epochs*(len(train_data_loader))
 
@@ -166,44 +166,44 @@ def train(model = None,
 
         '''Evaluation:'''
         model.eval()
-        running_test_loss = 0
-        all_y_true_test = []
-        all_y_pred_test = []
+        running_val_loss = 0
+        all_y_true_val = []
+        all_y_pred_val = []
 
         with torch.no_grad():
-            for image_test, image_filled_test, k_test in test_data_loader:
-                image_test, image_filled_test, k_test = image_test.to(device), image_filled_test.to(device), k_test.to(device)
-                outputs_image = model(image_test) # Make predictions
-                outputs_image_filled = model(image_filled_test) # Make predictions
+            for image_val, image_filled_val, k_val in val_data_loader:
+                image_val, image_filled_val, k_val = image_val.to(device), image_filled_val.to(device), k_val.to(device)
+                outputs_image = model(image_val) # Make predictions
+                outputs_image_filled = model(image_filled_val) # Make predictions
 
-                loss =  (loss_fn(outputs_image,k_test)+ loss_fn(outputs_image_filled,k_test))/2 # Calculate loss
+                loss =  (loss_fn(outputs_image,k_val)+ loss_fn(outputs_image_filled,k_val))/2 # Calculate loss
 
-                running_test_loss += loss.item()
-                all_y_true_test.append(k_test.detach())
-                all_y_pred_test.append(((outputs_image+outputs_image_filled)/2).detach())
+                running_val_loss += loss.item()
+                all_y_true_val.append(k_val.detach())
+                all_y_pred_val.append(((outputs_image+outputs_image_filled)/2).detach())
 
-        epoch_test_mse = running_test_loss/len(test_data_loader)
-        y_true_tensor = torch.cat(all_y_true_test)
-        y_pred_tensor = torch.cat(all_y_pred_test)
-        epoch_test_r2 = r2_score_torch(y_true_tensor, y_pred_tensor).item()
+        epoch_val_mse = running_val_loss/len(val_data_loader)
+        y_true_tensor = torch.cat(all_y_true_val)
+        y_pred_tensor = torch.cat(all_y_pred_val)
+        epoch_val_r2 = r2_score_torch(y_true_tensor, y_pred_tensor).item()
         
         metrics["epoch"].append(epoch)
         metrics["train_mse"].append(epoch_train_mse)
-        metrics["test_mse"].append(epoch_test_mse)
+        metrics["val_mse"].append(epoch_val_mse)
         metrics["train_r2"].append(epoch_train_r2)
-        metrics["test_r2"].append(epoch_test_r2)
+        metrics["val_r2"].append(epoch_val_r2)
         metrics["grad_norm"].append(epoch_grad_norm)
 
-        # Checkpoint model with lowest test mse.
-        if (epoch_test_mse<best_test_mse):
+        # Checkpoint model with lowest val mse.
+        if (epoch_val_mse<best_val_mse):
             '''Save best performing model:'''
-            best_test_mse = epoch_test_mse
+            best_val_mse = epoch_val_mse
             torch.save(model.state_dict(), os.path.join(path,"models",save_model_path))
-            print(f"Best model form epoch: {epoch} with MSE: {best_test_mse:.5f} saved.")
+            print(f"Best model form epoch: {epoch} with MSE: {best_val_mse:.5f} saved.")
 
         print(f'Epoch {epoch},')
         print(f'Train: MSE = {epoch_train_mse:.5f}, R2 = {epoch_train_r2:.5f}, Grad Norm = {epoch_grad_norm:.5f}')
-        print(f'Test: MSE = {epoch_test_mse:.5f}, R2 = {epoch_test_r2:.5f}')
+        print(f'val: MSE = {epoch_val_mse:.5f}, R2 = {epoch_val_r2:.5f}')
         print('')
         # torch.cuda.empty_cache()
 
