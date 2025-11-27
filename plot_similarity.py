@@ -1,3 +1,8 @@
+'''
+Docstring for plot_similarity
+
+This script makes the similarity plots between the true and predicted values from each best model.
+'''
 import os
 import numpy as np
 import torch

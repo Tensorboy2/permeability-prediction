@@ -136,7 +136,7 @@ def plot_fit(models,mode='datapoints', save_path="diff_num_datapoints.pdf"):
 
             data_records.append({
                 "model": model_name,
-                "num_datapoints": run["epochs"],   # x-axis is epochs here
+                "num_datapoints": run["epochs"],   # x-axis
                 "max_r2": 1 - max_r2,
                 "color": run["color"],
             })

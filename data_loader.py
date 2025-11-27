@@ -1,5 +1,7 @@
 '''
+data_loader.py
 
+This module implements PyTorch Datasets and augmentation for dataloaders.
 '''
 from torch.utils.data import DataLoader, Dataset
 import torch

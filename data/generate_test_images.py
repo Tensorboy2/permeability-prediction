@@ -1,3 +1,9 @@
+'''
+Docstring for data.generate_test_images
+
+This script generates the test images.
+'''
+
 import numpy as np
 import matplotlib.pyplot as plt
 import os

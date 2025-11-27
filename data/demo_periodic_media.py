@@ -1,5 +1,6 @@
 '''
 demo_periodic_media.py
+
 Demonstration of the generation of periodic porous media with percolation in both directions.
 '''
 import numpy as np
@@ -84,13 +85,6 @@ def demo():
     center_overlay[img == 1, :3] = 0.95  # White solids
     center_overlay[img == 1, 3] = 1.0  # Fully opaque
     ax.imshow(center_overlay, extent=(w, 2*w, 2*h, h), interpolation="none")
-    
-    # Frame
-    # rect = plt.Rectangle(
-    #     (w, h), w, h, linewidth=2.5, edgecolor='black', 
-    #     facecolor='none', alpha=0.5, linestyle='-'
-    # )
-    # ax.add_patch(rect)
     
     # View limits
     margin = w // 5

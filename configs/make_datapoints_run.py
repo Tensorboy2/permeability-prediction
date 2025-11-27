@@ -1,3 +1,8 @@
+'''
+Docstring for configs.make_datapoints_run
+
+Module for making models run with different numbers of samples.
+'''
 import yaml
 import itertools
 import os
@@ -31,7 +36,7 @@ elif args.models == "vit":
 
 data_set_sizes = [2000, 4000, 6000, 8000, 10000, 12000, 14000, 16000, 18000]
 
-# optional fixed fields
+# fixed
 common = {
     "data": {
         "hflip": False,

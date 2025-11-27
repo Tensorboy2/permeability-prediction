@@ -1,7 +1,7 @@
 '''
 convert_to_npz.py
 
-Module for converting folders to npz format.
+Module for converting folders to npy format.
 '''
 import numpy as np
 import os

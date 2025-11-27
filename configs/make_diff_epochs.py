@@ -1,3 +1,8 @@
+'''
+Docstring for configs.make_diff_epochs_run
+
+Module for making the all models run to different epochs epochs.
+'''
 import yaml
 import itertools
 import os
@@ -19,7 +24,7 @@ models = [
           ]
 epochs = [200,300,400,500,1000]
 
-# optional fixed fields
+# fixed
 common = {
     "data": {
         "hflip": False,

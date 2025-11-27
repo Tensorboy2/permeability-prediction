@@ -1,3 +1,8 @@
+'''
+Docstring for data.lbm
+
+This module implements a simple D2Q9 Lattice-Boltzmann scheme with a naive driving force.
+'''
 import numpy as np
 import os
 path = os.path.dirname(__file__)

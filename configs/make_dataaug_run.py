@@ -1,3 +1,8 @@
+'''
+Docstring for configs.make_dataaug_run
+
+Module for making convnext and vit do all combinations of augmentation.
+'''
 import yaml
 import itertools
 import os
@@ -38,7 +43,7 @@ augmentation_variants = [
     {"hflip": False, "vflip": False, "rotate": False, "group": True},
 ]
 
-# optional fixed fields
+# fixed
 common = {
     "data": {
         "val_size": 0.2,

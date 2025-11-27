@@ -1,3 +1,8 @@
+'''
+Docstring for data.generate_images
+
+This module generates the test and validation images and fills to generate images_filled.
+'''
 import numpy as np
 import matplotlib.pyplot as plt
 import os

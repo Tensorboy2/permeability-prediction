@@ -9,7 +9,7 @@ The data generation involves: generating synthetic periodic porous medium with a
 
 The porous media is generated using a periodic version of the **binary_blobs** function from SciKit-Image. Each medium is required to percolate in both the x and y direction. We fill disconnected fluid clusters to obtain the image filled version of each medium. For flow simulations we use the Lattice-Boltzmann method with the $D2Q9$ lattice. With the obtained velocity field we compute the permeability using Darcy's law. 
 
-The data is available as: \href{} 
+The data is available at [Zenodo](https://zenodo.org/)
 From the Zenodo download you must put the files in the following folders:
 - data/
     - images.npy

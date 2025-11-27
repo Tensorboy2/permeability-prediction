@@ -1,3 +1,8 @@
+'''
+Docstring for configs.make_all_models_run
+
+Module for making the all models run to 1000 epochs.
+'''
 import yaml
 import argparse
 import os
@@ -27,7 +32,7 @@ models = ["ViT_T16",
             "ResNet101"
           ]
 
-# optional fixed fields
+# fixed
 common = {
     "data": {
         "hflip": False,
