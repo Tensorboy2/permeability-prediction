@@ -1,15 +1,15 @@
 # Permeability Prediction
 By Sigurd Sønvisen Vargdal
 
-This repository contains code for generating data and training deep learning image methods on prediction of permeability.
-
+This repository contains code for generating data and training deep learning image methods on prediction of permeability, and corresponds to the paper: "Comparing Convolution- and Transformer-based Neural Network59
+Architectures for Predicting Permeability of 2D Porous Media".
 
 ## Data
 The data generation involves: generating synthetic periodic porous medium with arbitrary geometry and running Lattice-Boltzmann simulations on the medium to obtain the respective *permeability* tensor.
 
 The porous media is generated using a periodic version of the **binary_blobs** function from SciKit-Image. Each medium is required to percolate in both the x and y direction. We fill disconnected fluid clusters to obtain the image filled version of each medium. For flow simulations we use the Lattice-Boltzmann method with the $D2Q9$ lattice. With the obtained velocity field we compute the permeability using Darcy's law. 
 
-The data is available at [Zenodo](https://zenodo.org/)
+The data is available at [Zenodo](https://zenodo.org/) with doi: 10.5281/zenodo.17711512
 From the Zenodo download you must put the files in the following folders:
 - data/
     - images.npy
