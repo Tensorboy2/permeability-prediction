@@ -428,6 +428,20 @@ def plot_combined_KC_models(preds, models_to_plot):
                 # ax.set_ylabel(r"Prediction ($K_{xy}, K_{yx}$)")
                 # ax.set_xticks(ticks=(),fontsize=7)
                 # ax.set_yticks(fontsize=7)
+    labels = ["a", "b", "c", "d", "e", "f"]
+    idx = 0
+    for r in range(2):
+        for c in range(3):
+            ax = axes[r, c]
+            ax.text(
+                0.02, 0.98,                 # top-left corner inside the axis
+                labels[idx],
+                transform=ax.transAxes,
+                fontsize=9,
+                fontweight="bold",
+                va="top", ha="left"
+            )
+            idx += 1
     # --- Final layout and save ---
     plt.tight_layout()
     plt.savefig("combined_KC_models.pdf", dpi=300)

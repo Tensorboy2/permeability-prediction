@@ -116,6 +116,15 @@ def plot_perm_vs_por_v4(porosities, permeabilities, path=os.path.dirname(__file_
         N, bins, _ = ax_histy.hist(perm, bins=100, color='black', alpha=0.9, orientation='horizontal')
         ax_histy.set_yticks([])
         ax_histy.set_ylim(ax_scatter.get_ylim())
+        # label = f"{chr(ord('a') + col)})"   # a), b), ...
+        # ax_scatter.text(
+        #     0.02, 0.98,                     # x,y in axis coords (relative)
+        #     label,
+        #     transform=ax_scatter.transAxes,
+        #     fontsize=12,
+        #     fontweight="bold",
+        #     va="top", ha="left"
+        # )
 
     # --- Shared colorbar ---
     cbar2d = fig.colorbar(
