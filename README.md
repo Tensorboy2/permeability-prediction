@@ -1,15 +1,15 @@
 # Permeability Prediction
 By Sigurd Sønvisen Vargdal
 
-This repository contains code for generating data and training deep learning image methods on prediction of permeability, and corresponds to the paper: "Comparing Convolution- and Transformer-based Neural Network59
-Architectures for Predicting Permeability of 2D Porous Media".
+This repository contains code for generating data and training deep learning image methods on prediction of permeability, and corresponds to the paper: "Comparing Convolution- and Transformer-based Neural Network Architectures for Predicting Permeability of 2D Porous Media".
 
 ## Data
 The data generation involves: generating synthetic periodic porous medium with arbitrary geometry and running Lattice-Boltzmann simulations on the medium to obtain the respective *permeability* tensor.
 
 The porous media is generated using a periodic version of the **binary_blobs** function from SciKit-Image. Each medium is required to percolate in both the x and y direction. We fill disconnected fluid clusters to obtain the image filled version of each medium. For flow simulations we use the Lattice-Boltzmann method with the $D2Q9$ lattice. With the obtained velocity field we compute the permeability using Darcy's law. 
 
-The data is available at [Zenodo](https://zenodo.org/) with doi: 10.5281/zenodo.17711512
+The data is available at [Zenodo](https://zenodo.org/records/17711512)
+
 From the Zenodo download you must put the files in the following folders:
 - data/
     - images.npy
@@ -56,4 +56,18 @@ The plots inside **results/**, can be made with the csv's in the folder.
 
 The similarity plots are made from **all_models_similarity_filled.npz**, which contains the target and prediction of each of the best models state\_dicts. **plot_similarity.py** produces the final similarity plots with the Kozeny-Carman fit, ConvNeXt-Small, and ViT-T16.
 
-
+<details><summary>Dataset BibTeX</summary>
+@dataset{vargdal_2025_17711512,
+  author       = {Vargdal, Sigurd},
+  title        = {Dataset and Model Weights for: Comparing
+                   Convolution- and Transformer-based Neural Network
+                   Architectures for Predicting Permeability of 2D
+                   Porous Media
+                  },
+  month        = nov,
+  year         = 2025,
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.17711512},
+  url          = {https://doi.org/10.5281/zenodo.17711512},
+}
+</details>
