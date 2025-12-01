@@ -1,7 +1,7 @@
 # Permeability Prediction
 By Sigurd Sønvisen Vargdal
 
-This repository contains code for generating data and training deep learning image methods on prediction of permeability, and corresponds to the paper: "Comparing Convolution- and Transformer-based Neural Network Architectures for Predicting Permeability of 2D Porous Media".
+This repository contains code for generating data and training deep learning image methods on prediction of permeability, and corresponds to the paper: "Neural Networks for Predicting Permeability Tensors of 2D Porous Media: Comparison of Convolution- and Transformer-based Architectures".
 
 ## Data
 The data generation involves: generating synthetic periodic porous medium with arbitrary geometry and running Lattice-Boltzmann simulations on the medium to obtain the respective *permeability* tensor.

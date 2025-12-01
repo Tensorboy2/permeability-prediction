@@ -118,7 +118,7 @@ run_fits_patch_sizes = {
     "ViT-T8": "ViT_T8_all.csv",
     "ViT-S8": "ViT_S8_all.csv",
 }
-plot_metrics(load_models_info(run_fits_patch_sizes,"tab10"), "ViT Different Patch Sizes")
+plot_metrics(load_models_info(run_fits_patch_sizes,"tab10"), "ViT_Different_Patch_Sizes")
 
 
 runs_vit_s16_diff_num_epochs = {
@@ -177,7 +177,7 @@ runs_1000_epochs = {
     # "ResNet-50": "ResNet50_all.csv",
     "ViT-T16": "ViT_T16_all.csv",
 }
-plot_metrics_vit(load_models_info(runs_1000_epochs,"viridis"), "Scaling for 1000 Epochs")
+plot_metrics_vit(load_models_info(runs_1000_epochs,"viridis"), "Scaling_for_1000_Epochs")
 
 def plot_grid_of_models(plot_groups, save_name="comparison_grid.pdf"):
     """
